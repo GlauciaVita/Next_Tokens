@@ -13,7 +13,7 @@ export const tokenService = {
         globalThis?.sessionStorage?.setItem(ACCESS_TOKEN_KEY, accessToken);
         // globalThis?.localStorage?.setItem(ACCESS_TOKEN_KEY, accessToken);
         nookies.set(ctx, ACCESS_TOKEN_KEY, accessToken, {
-            maxAge: ONE_HOUR,
+            maxAge: ONE_MINUTE,
             path: "/",
         });
     },
