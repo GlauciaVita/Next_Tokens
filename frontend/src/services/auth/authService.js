@@ -12,9 +12,24 @@ export const authService = {
         .then(async (response) => {
             if (!response.ok) throw new Error("usuario ou senha invalidos!")
             const body = response.body;
-            console.log(body);
 
             tokenService.save(body.data.access_token);
+            console.log(body);
+
+            return body;
+        })
+        .then(async ({data}) => {
+            const {refresh_token} = data;
+            console.log(refresh_token);
+
+            const response = await HttpClient("/api/refresh",  {
+                method: 'POST',
+                body: {
+                    refresh_token
+                }
+            })
+
+            console.log(response);
         })
     },
 
@@ -24,8 +39,9 @@ export const authService = {
         return HttpClient(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/session`, {
             method: "GET",
             headers:{
-                Authorization:`bearer ${token}`,
-            }
+                Authorization:`bearer ${token}`
+            },
+            refresh: true,
         })
         .then((response) => {
             if (!response.ok) throw new Error("Nao autorizado");
